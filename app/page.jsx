@@ -37,11 +37,11 @@ export default function HomePage() {
             }}
           >
             <span className="pill" style={{ marginBottom: "16px" }}>
-              Texas-first civic action
+              Made for students, by students
             </span>
 
             <h1 className="page-heading">
-              Turn student concerns into <span style={{ color: "var(--accent)" }}>action</span>
+              Your voice shapes <span style={{ color: "var(--accent)" }}>the future</span>
             </h1>
 
             <p style={{ maxWidth: "760px", marginTop: "8px", fontSize: "1.08rem" }}>

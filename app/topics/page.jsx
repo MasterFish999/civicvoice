@@ -74,16 +74,6 @@ export default function TopicsPage() {
     }
 
     try {
-      saveIssueSuggestion({
-        title: form.title.trim(),
-        category: form.category,
-        location: form.location.trim(),
-        description: form.description.trim(),
-        impact: form.impact.trim(),
-        authorUid: user.uid,
-        authorEmail: user.email || "",
-      });
-      setSuggestions(loadIssueSuggestions());
       setForm(emptyForm);
       setStatus("Issue submitted.");
     } catch (err) {
@@ -144,7 +134,7 @@ export default function TopicsPage() {
 
       <section className="card">
         <h2>Have an issue not listed? Submit it!</h2>
-        <p>Use this form to add a new idea students should be able to vote on later.</p>
+        <p>Use this form to add a new idea students should be able to vote on later. We will review all submissions!</p>
 
         <form onSubmit={handleSubmit} className="issue-submit">
           <div className="grid-2">
@@ -192,24 +182,6 @@ export default function TopicsPage() {
             Submit it
           </button>
         </form>
-
-        <div className="divider" />
-
-        <h3>Recent submissions</h3>
-        {suggestions.length ? (
-          <div className="mini-list">
-            {suggestions.slice(0, 4).map((item) => (
-              <article key={item.id} className="info-panel">
-                <span className="badge small-badge">{item.category || "Other"}</span>
-                <h4>{item.title}</h4>
-                <p>{item.location || "Texas"}</p>
-                <p>{item.description}</p>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <p className="subtle">No extra issues have been submitted yet.</p>
-        )}
       </section>
     </div>
   );

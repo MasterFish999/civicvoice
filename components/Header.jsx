@@ -27,7 +27,7 @@ export default function Header() {
           </span>
           <span>
             <span className="brand-name">CivicVoice</span>
-            <span className="brand-tag">Texas students taking action</span>
+            <span className="brand-tag">Your voice matters.</span>
           </span>
         </Link>
 

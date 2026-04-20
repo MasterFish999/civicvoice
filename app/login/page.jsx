@@ -4,90 +4,138 @@ import { useState } from "react";
 import { useAuth } from "../../components/AuthProvider";
 
 export default function LoginPage() {
-  const { user, signInWithGoogle, signInWithEmail, signUpWithEmail, logOut } = useAuth();
+  const { user, signInWithEmail, signUpWithEmail, logOut } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
 
-  async function handleEmailLogin(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setLoading(true);
     setMessage("");
+
     try {
-      await signInWithEmail(email, password);
-      setMessage("Signed in.");
+      if (isSignup) {
+        await signUpWithEmail(email, password);
+        setMessage("Account created successfully.");
+      } else {
+        await signInWithEmail(email, password);
+        setMessage("Signed in successfully.");
+      }
     } catch (err) {
-      setMessage(err.message || "Could not sign in.");
+      setMessage(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleEmailSignup(event) {
-    event.preventDefault();
-    setLoading(true);
-    setMessage("");
-    try {
-      await signUpWithEmail(email, password);
-      setMessage("Account created.");
-    } catch (err) {
-      setMessage(err.message || "Could not sign up.");
-    } finally {
-      setLoading(false);
-    }
+  if (user) {
+    return (
+      <div
+        style={{
+          minHeight: "80vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "2rem",
+        }}
+      >
+        <div className="card" style={{ width: "100%", maxWidth: "420px", textAlign: "center" }}>
+          <h1 style={{ marginBottom: "1rem" }}>Welcome back</h1>
+          <p style={{ marginBottom: "1.5rem" }}>
+            Signed in as <strong>{user.email}</strong>
+          </p>
+          <button className="btn" onClick={logOut}>
+            Log out
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="stack">
-      <section className="section-head">
-        <div>
-          <p className="eyebrow">Login</p>
-          <h1>Sign in to vote and submit ideas</h1>
-          <p>Use Google or email/password so your votes stay tied to one account.</p>
-        </div>
-      </section>
+    <div
+      style={{
+        minHeight: "80vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "2rem",
+      }}
+    >
+      <div
+        className="card"
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          padding: "2rem",
+        }}
+      >
+        <h1 style={{ marginBottom: "0.5rem", textAlign: "center" }}>
+          {isSignup ? "Create account" : "Sign in"}
+        </h1>
 
-      <section className="grid-2">
-        <div className="card">
-          <h2>Google sign-in</h2>
-          <p>Fastest option for students and staff.</p>
-          <button className="btn" type="button" onClick={signInWithGoogle} disabled={loading}>
-            Continue with Google
+        <p
+          style={{
+            textAlign: "center",
+            marginBottom: "1.5rem",
+            opacity: 0.7,
+          }}
+        >
+          CivicVoice
+        </p>
+
+        <form className="stack-sm" onSubmit={handleSubmit}>
+          <input
+            className="input"
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            className="input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button className="btn" type="submit" disabled={loading}>
+            {loading
+              ? "Please wait..."
+              : isSignup
+              ? "Create account"
+              : "Sign in"}
           </button>
+        </form>
 
-          {user ? (
-            <div className="notice" style={{ marginTop: 14 }}>
-              You are signed in as {user.displayName || user.email || "a user"}.
-              <div style={{ marginTop: 10 }}>
-                <button className="btn btn-secondary" onClick={logOut}>Log out</button>
-              </div>
-            </div>
-          ) : null}
-        </div>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          style={{ marginTop: "1rem", width: "100%" }}
+          onClick={() => setIsSignup(!isSignup)}
+        >
+          {isSignup
+            ? "Already have an account? Sign in"
+            : "Need an account? Sign up"}
+        </button>
 
-        <div className="card">
-          <h2>Email sign-in</h2>
-          <form className="stack-sm" onSubmit={handleEmailLogin}>
-            <input className="input" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address" />
-            <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-            <div className="row-actions">
-              <button className="btn" type="submit" disabled={loading}>Sign in</button>
-              <button className="btn btn-secondary" type="button" onClick={handleEmailSignup} disabled={loading}>Sign up</button>
-            </div>
-          </form>
-          {message ? <div className="notice" style={{ marginTop: 14 }}>{message}</div> : null}
-        </div>
-      </section>
-
-      <section className="card">
-        <h2>What login unlocks</h2>
-        <ul className="bullet-list">
-          <li>Vote once on each issue</li>
-          <li>Submit ideas that are not listed yet</li>
-          <li>Save local representative additions for faster mailto links later</li>
-        </ul>
-      </section>
+        {message ? (
+          <div
+            className="notice"
+            style={{ marginTop: "1rem", textAlign: "center" }}
+          >
+            {message}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

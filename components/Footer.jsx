@@ -10,7 +10,7 @@ export default function Footer() {
           </span>
           <strong>CivicVoice</strong>
         </div>
-        <p>Helping Texas students understand issues and take action with less friction.</p>
+        <p>Empowering students to participate in democracy.</p>
       </div>
     </footer>
   );
