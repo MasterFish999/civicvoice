@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { getRepresentativesByZip } from '@/lib/representatives-data';
+import { getRepresentativesByZip } from "../../../lib/representatives-data";
 
 export async function GET(req) {
   const url = new URL(req.url);
